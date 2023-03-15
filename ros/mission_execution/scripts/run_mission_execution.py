@@ -4,9 +4,9 @@
 
 import actionlib
 
+from mission_execution.msg import MissionControlAction, \
+    MissionControlFeedback, MissionControlResult
 import rospy
-from mission_execution.msg import MissionControlFeedback, MissionControlResult, \
-    MissionControlAction
 
 TASK_FAILED = 0
 TASK_STARTED = 1
