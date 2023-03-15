@@ -1,0 +1,9 @@
+# mission we want to start
+string mission_name
+---
+# result
+bool success  # True if the action finished successfully
+---
+# feedback during execution
+string text  # some text, containing the current state
+int32 type  # type of the feedback, e.g. 0 = error, 1 = okay, ...

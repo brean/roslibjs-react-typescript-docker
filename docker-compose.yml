@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+  # entity that executes the mission_execution, an autonomous agent, for example a robot
+  mission_execution:
+    hostname: mission_execution
+    image: mission_execution
+    # gazebo server
+    build:
+      context: ./ros/
+      dockerfile: ./Dockerfile
+    working_dir: /root/catkin_ws/
+    entrypoint: /entrypoint.sh
+    environment: 
+      - "ROS_DISTRO=noetic"
+    volumes:
+      - ./ros/mission_execution/:/root/catkin_ws/src/mission_execution/:z
+      # for debug: - ./mission_logs:/root/.ros/log/:rw
+    ports:
+      - 9090:9090
+    command: ["roslaunch", "mission_execution", "mission_control.launch"]
+
+  web_react:
+    # Web UI using React
+    hostname: web_react
+    image: web_react
+    build:
+      context: ./client/
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./client/src:/app/src:z
+      - ./client/public:/app/public:z
+      - ./client/package.json:/app/package.json:z
+      - ./client/package-lock.json:/app/package-lock.json:z
+      - ./client/tsconfig.json:/app/tsconfig.json:z
+    command: ["npm", "run", "start"]
+    ports:
+      - 3000:3000
+
+
+networks:
+  default:
+    external:
+      name: roslibpytest
