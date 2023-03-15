@@ -5,7 +5,6 @@ services:
   mission_execution:
     hostname: mission_execution
     image: mission_execution
-    # gazebo server
     build:
       context: ./ros/
       dockerfile: ./Dockerfile
@@ -13,12 +12,25 @@ services:
     entrypoint: /entrypoint.sh
     environment: 
       - "ROS_DISTRO=noetic"
-    volumes:
-      - ./ros/mission_execution/:/root/catkin_ws/src/mission_execution/:z
+    #volumes:
+      #- ./ros/mission_execution/:/root/catkin_ws/src/mission_execution/:z
       # for debug: - ./mission_logs:/root/.ros/log/:rw
     ports:
       - 9090:9090
+    expose:
+      - 11311
     command: ["roslaunch", "mission_execution", "mission_control.launch"]
+
+  python_client:
+    image: mission_execution
+    working_dir: /root/catkin_ws/
+    entrypoint: /entrypoint.sh
+    environment: 
+      - "ROS_DISTRO=noetic"
+    volumes:
+      - ./ros/mission_execution/:/root/catkin_ws/src/mission_execution/:z
+      # for debug: - ./mission_logs:/root/.ros/log/:rw
+    command: ["/root/catkin_ws/src/mission_execution/mission_client.py"]
 
   web_react:
     # Web UI using React

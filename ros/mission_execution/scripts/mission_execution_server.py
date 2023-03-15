@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-# we do not plan here, we just use the manually predefined arm positions to
-# scan the fuselage.
 
 import actionlib
 
@@ -17,23 +15,24 @@ class MissionControl:
     _feedback = MissionControlFeedback()
     _result = MissionControlResult()
 
-    def __init__(self, name='mission_control'):
-        self._action_name = name
+    def __init__(self):
         self.missions = {
             'test_mission': self.test_mission
         }
 
         # provide an actionlib-interface to start and monitor missions
         self._as = actionlib.SimpleActionServer(
-            self._action_name, MissionControlAction,
+            '/mission_control', MissionControlAction,
             execute_cb=self.execute_cb, auto_start=False)
         self._as.start()
 
     def execute_cb(self, mission_name):
+        rospy.loginfo(mission_name)
         if mission_name not in self.missions:
             rospy.logerr(f'Can not start unknown mission {mission_name}')
             return False
         else:
+            rospy.loginfo(f'Start mission {mission_name}')
             self.missions[mission_name]()
 
     def _wait(self):
@@ -82,4 +81,5 @@ class MissionControl:
 if __name__ == '__main__':
     rospy.init_node('mission_control', anonymous=True)
     node = MissionControl()
+    rospy.loginfo('mission_control started')
     node.spin()

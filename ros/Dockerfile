@@ -7,8 +7,11 @@ RUN apt-get update -qq \
     && apt-get install -y --no-install-recommends \
         python3-catkin-tools \
         ros-noetic-catkin \
+        python3-pip \
         ros-noetic-rosbridge-server \
     && rm -rf /var/lib/apt/lists/*
+
+RUN pip3 install roslibpy
 
 COPY ./mission_execution ${CATKIN_WS_SRC}/mission_execution
 

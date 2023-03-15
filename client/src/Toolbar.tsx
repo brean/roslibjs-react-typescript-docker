@@ -10,8 +10,8 @@ interface IToolbarProps {
 export default function Toolbar(props: IToolbarProps) {
   const missionControlClient = new ROSLIB.ActionClient({
     ros: props.ros,
-    serverName: '/mission_execution',
-    actionName: 'mission_execution/MissionControl'
+    serverName: '/mission_control',
+    actionName: 'mission_execution/MissionControlAction'
   });
 
   const goal = new ROSLIB.Goal({
@@ -37,8 +37,8 @@ export default function Toolbar(props: IToolbarProps) {
         onClick={() => {
           if (props.ros.isConnected) {
             console.log('START ACTION!');
-            
             goal.send();
+            console.log('ACTION STARTED!');
           } else {
             console.error('not connected')
           }
