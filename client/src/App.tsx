@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import ROSLIB from 'roslib';
 import Toolbar from './Toolbar';
